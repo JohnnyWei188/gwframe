@@ -1,0 +1,9 @@
+app:
+  logger:
+    level: debug
+  dependencies:
+    MysqlURI: 
+    MinioURI: 
+  ports:
+    grpc: ":9090"
+    http: ":8081"
