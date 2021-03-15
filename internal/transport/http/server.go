@@ -2,21 +2,27 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/http"
 	"time"
 
+	"github.com/JohnnyWei188/gwframe/internal/transport"
+	"github.com/JohnnyWei188/gwframe/internal/transport/middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 )
+
+var _ transport.Server = (*Server)(nil)
 
 // Server http server
 type Server struct {
 	*http.Server
-	lis     net.Listener
-	network string
-	address string
-	timeout time.Duration
-	mux     *runtime.ServeMux
+	lis        net.Listener
+	network    string
+	address    string
+	timeout    time.Duration
+	httpMux    *http.ServeMux
+	middleware middleware.Middleware
 }
 
 // ServerOption server options
@@ -43,18 +49,35 @@ func Timeout(timeout time.Duration) ServerOption {
 	}
 }
 
+// Middleware set middleware
+func Middleware(m middleware.Middleware) ServerOption {
+	return func(s *Server) {
+		s.middleware = m
+	}
+}
+
+// HandleFunc set handle func, you can call this func many times with distinct pattern
+func HandleFunc(pattern string, f http.HandlerFunc) ServerOption {
+	return func(s *Server) {
+		s.httpMux.HandleFunc(pattern, f)
+	}
+}
+
 // NewServer create a server
 func NewServer(mux *runtime.ServeMux, opts ...ServerOption) *Server {
 	srv := &Server{
 		network: "tcp",
 		address: ":0",
 		timeout: time.Second,
+		httpMux: http.NewServeMux(),
 	}
 	for _, opt := range opts {
 		opt(srv)
 	}
-	srv.mux = mux
-	srv.Server = &http.Server{Handler: srv}
+	srv.httpMux.Handle("/", mux)
+	srv.Server = &http.Server{
+		Handler: srv.middleware(srv),
+	}
 	return srv
 }
 
@@ -62,7 +85,9 @@ func NewServer(mux *runtime.ServeMux, opts ...ServerOption) *Server {
 func (s *Server) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx, cancel := context.WithTimeout(req.Context(), s.timeout)
 	defer cancel()
-	s.mux.ServeHTTP(res, req.WithContext(ctx))
+	fmt.Println("here1---------")
+	s.httpMux.ServeHTTP(res, req.WithContext(ctx))
+	fmt.Println("here2---------")
 }
 
 // Start start
