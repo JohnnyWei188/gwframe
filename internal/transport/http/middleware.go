@@ -1,8 +1,10 @@
-package middleware
+package http
 
-import "net/http"
+import (
+	"net/http"
+)
 
-// Middleware is HTTP/gRPC transport middleware.
+// Middleware is HTTP transport middleware
 type Middleware func(next http.Handler) http.Handler
 
 // Chain returns a Middleware that specifies the chained handler for endpoint.

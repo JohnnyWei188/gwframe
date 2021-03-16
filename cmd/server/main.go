@@ -8,8 +8,8 @@ import (
 func main() {
 
 	hw := service.NewGreeterServer()
-	grpcSrv := server.NewGRPCServer(hw)
-	go grpcSrv.Start()
 	httpSrv := server.NewHTTPServer(hw)
-	httpSrv.Start()
+	go httpSrv.Start()
+	grpcSrv := server.NewGRPCServer(hw)
+	grpcSrv.Start()
 }

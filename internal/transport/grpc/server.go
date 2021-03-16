@@ -4,8 +4,11 @@ import (
 	"net"
 	"time"
 
+	"github.com/JohnnyWei188/gwframe/internal/transport"
 	"google.golang.org/grpc"
 )
+
+var _ transport.Server = (*Server)(nil)
 
 // Server http server
 type Server struct {
@@ -14,6 +17,8 @@ type Server struct {
 	network string
 	address string
 	timeout time.Duration
+	//middleware Middleware
+	grpcOpts []grpc.ServerOption
 }
 
 // ServerOption server options
@@ -40,6 +45,13 @@ func Timeout(timeout time.Duration) ServerOption {
 	}
 }
 
+// Options set timeout with server
+func Options(opts ...grpc.ServerOption) ServerOption {
+	return func(s *Server) {
+		s.grpcOpts = opts
+	}
+}
+
 // NewServer create a server
 func NewServer(opts ...ServerOption) *Server {
 	srv := &Server{
@@ -50,7 +62,13 @@ func NewServer(opts ...ServerOption) *Server {
 	for _, opt := range opts {
 		opt(srv)
 	}
-	srv.Server = grpc.NewServer()
+	var grpcOpts = []grpc.ServerOption{
+		grpc.ChainUnaryInterceptor(), // here can add default interceptor
+	}
+	if len(srv.grpcOpts) > 0 {
+		grpcOpts = append(grpcOpts, srv.grpcOpts...)
+	}
+	srv.Server = grpc.NewServer(grpcOpts...)
 	return srv
 }
 
