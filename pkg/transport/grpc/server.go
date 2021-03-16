@@ -4,7 +4,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/JohnnyWei188/gwframe/internal/transport"
+	"github.com/JohnnyWei188/gwframe/pkg/transport"
 	"google.golang.org/grpc"
 )
 
@@ -13,11 +13,10 @@ var _ transport.Server = (*Server)(nil)
 // Server http server
 type Server struct {
 	*grpc.Server
-	lis     net.Listener
-	network string
-	address string
-	timeout time.Duration
-	//middleware Middleware
+	lis      net.Listener
+	network  string
+	address  string
+	timeout  time.Duration
 	grpcOpts []grpc.ServerOption
 }
 

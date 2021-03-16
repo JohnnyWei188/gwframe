@@ -8,7 +8,7 @@ import (
 
 	"github.com/JohnnyWei188/gwframe/api/helloworld/v1"
 	"github.com/JohnnyWei188/gwframe/internal/service"
-	myhttp "github.com/JohnnyWei188/gwframe/internal/transport/http"
+	myhttp "github.com/JohnnyWei188/gwframe/pkg/transport/http"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/context"
 )
@@ -65,6 +65,6 @@ func CustomMiddleware(next http.Handler) http.Handler {
 		start := time.Now()
 		next.ServeHTTP(w, r)
 		cost := time.Now().Sub(start)
-		log.Printf("path1111: %v, cost: %v \n", r.URL.Path, cost)
+		log.Printf("path: %v, cost: %v \n", r.URL.Path, cost)
 	})
 }

@@ -5,7 +5,7 @@ import (
 
 	"github.com/JohnnyWei188/gwframe/api/helloworld/v1"
 	"github.com/JohnnyWei188/gwframe/internal/service"
-	mygrpc "github.com/JohnnyWei188/gwframe/internal/transport/grpc"
+	mygrpc "github.com/JohnnyWei188/gwframe/pkg/transport/grpc"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

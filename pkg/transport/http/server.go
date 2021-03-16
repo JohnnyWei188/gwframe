@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/JohnnyWei188/gwframe/internal/transport"
+	"github.com/JohnnyWei188/gwframe/pkg/transport"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 )
 
