@@ -1,0 +1,5 @@
+{"level":"ERROR","time":"2021-03-17T11:28:24.688+0800","caller":"_example/main.go:14","msg":"this is a error: error "}
+{"level":"INFO","time":"2021-03-17T11:28:24.688+0800","caller":"_example/main.go:24","msg":"info success","x1":"x111","x2":"x222","x3":"x333"}
+{"level":"ERROR","time":"2021-03-17T11:28:24.688+0800","caller":"_example/main.go:26","msg":"info error","x1":"x111","x2":"x222","x3":"x333"}
+{"level":"INFO","time":"2021-03-17T11:28:24.688+0800","caller":"_example/main.go:30","msg":"Instance"}
+{"level":"ERROR","time":"2021-03-17T11:28:24.688+0800","caller":"_example/main.go:31","msg":"Error"}
